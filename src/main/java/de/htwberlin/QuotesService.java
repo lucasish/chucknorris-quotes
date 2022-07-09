@@ -1,4 +1,4 @@
-package de.htwberlin.service;
+package de.htwberlin;
 
 import java.util.List;
 

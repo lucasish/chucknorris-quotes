@@ -1,6 +1,6 @@
 <template>
   <div class="quote-wrapper">
-    <img alt="chuck-norris" src="../assets/chuck-norris.png" class="img" />
+    <img alt="chuck-norris" src="../assets/chuck-norris.png" class="img"/>
     <h1 class="quote">"{{ randomQuote }}"</h1>
   </div>
 </template>
@@ -11,12 +11,33 @@ export default {
   data() {
     return {
       randomQuote:
-        "Wenn alles funktioniert, steht hier ein Chuck Norris Spruch.",
+          "Wenn alles funktioniert, steht hier ein Chuck Norris Spruch.",
     };
   },
   methods: {
     loadRandomQuote() {
       // ToDo: Rufen Sie hier den Rest-Endpunkt des Servers auf
+
+      var index = this.getRandomInt(79)
+
+      console.log(index)
+
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      }
+
+      fetch("http://localhost:8080/api/v1/quotes?index=" + index, requestOptions)
+          .then(response => response.json())
+          .then(result => console.log(result))
+          .then(result => result.forEach(quote => {
+            this.randomQuote.push(quote)
+          }))
+          .catch(error => console.log('error', error))
+
+      // return this.result
+
+
     },
     getRandomInt(maxExclusive) {
       return Math.floor(Math.random() * maxExclusive);
@@ -34,14 +55,17 @@ export default {
   width: 95%;
   margin: auto;
 }
+
 h1 {
   font-size: 4vw;
   text-align: center;
   font-style: italic;
 }
+
 .img {
   width: 50%;
 }
+
 .quote {
   width: 50%;
 }
@@ -51,9 +75,11 @@ h1 {
     display: flex;
     flex-direction: column;
   }
+
   .img {
     width: 100%;
   }
+
   .quote {
     width: 100%;
   }
