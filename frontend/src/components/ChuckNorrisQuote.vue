@@ -1,6 +1,6 @@
 <template>
   <div class="quote-wrapper">
-    <img alt="chuck-norris" src="../assets/chuck-norris.png" class="img"/>
+   <img alt="chuck-norris" @click="loadRandomQuote" src="../assets/chuck-norris.png" class="img"/> <!-- // on click = neuer spruch-->
     <h1 class="quote">"{{ randomQuote }}"</h1>
   </div>
 </template>
@@ -19,29 +19,31 @@ export default {
       // ToDo: Rufen Sie hier den Rest-Endpunkt des Servers auf
 
       var index = this.getRandomInt(79)
-
       console.log(index)
 
+      //aus postman geklaut
       const requestOptions = {
         method: 'GET',
         redirect: 'follow'
       }
 
-      fetch("http://localhost:8080/api/v1/quotes?index=" + index, requestOptions)
-          .then(response => response.json())
-          .then(result => console.log(result))
-          .then(result => result.forEach(quote => {
-            this.randomQuote.push(quote)
-          }))
-          .catch(error => console.log('error', error))
+      // der Client übermittelt den Index via Request-Parameter index, also z.B. /api/v1/quotes?index=53
+      const endpoint = 'http://localhost:8080'+ '/api/v1/quotes?index=' + index
+      console.log(endpoint) //just to be sure
 
-      // return this.result
+      fetch(endpoint, requestOptions)
+          .then(response => response.text()) //der Endpunkt soll dem Client ein JSON liefern
+          .then(quote => this.randomQuote = quote)
+          .catch(error => console.log('error', error));
 
 
     },
     getRandomInt(maxExclusive) {
       return Math.floor(Math.random() * maxExclusive);
     },
+    mounted: async function () {
+      this.loadRandomQuote()
+    }
   },
 };
 </script>

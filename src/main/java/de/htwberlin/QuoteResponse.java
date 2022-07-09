@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class QuoteResponse implements QuotesService {
+  // Implementieren Sie das Interface QuotesService
 
   private String quote;
 
